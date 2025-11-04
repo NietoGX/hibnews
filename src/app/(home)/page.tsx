@@ -1,6 +1,8 @@
 import { getLatestNews } from "@/features/news/_actions/get-latest-news";
 import { NewsList } from "@/features/news/_components/news-list";
 
+export const revalidate = 60;
+
 export default async function Home() {
   const { data: news } = await getLatestNews();
 
