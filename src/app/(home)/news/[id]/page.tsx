@@ -3,11 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getNewsById } from "@/features/news/actions/get-news-by-id";
+import { getAllNewsIds } from "@/features/news/actions/get-all-news-ids";
 
 interface NewsPageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+export const revalidate = 300; // Regenerate every 5 minutes
+
+export async function generateStaticParams() {
+  const ids = await getAllNewsIds();
+
+  return ids.map((id) => ({
+    id: id,
+  }));
 }
 
 export default async function NewsPage({ params }: NewsPageProps) {
