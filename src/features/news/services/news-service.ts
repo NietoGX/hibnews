@@ -74,7 +74,7 @@ class NewsService {
     }
   }
 
-  async getNewsById(id: string): Promise<NewsArticle | null> {
+  async getNewsById(id: string): Promise<ServiceResponse<NewsArticle | null>> {
     try {
       const response = await api.get(`http://localhost:3000/api/news/${id}`);
 
@@ -84,26 +84,35 @@ class NewsService {
 
       const validatedResponse = singleNewsResponseSchema.parse(response);
 
-      return {
+      const processedNews = {
         ...validatedResponse.data,
         publishedAt: new Date(validatedResponse.data.publishedAt),
       };
+
+      return {
+        success: true,
+        data: processedNews,
+        message: `News article ${id} fetched successfully`,
+      };
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error(`Invalid API response: ${error.issues
-          .map((e: any) => e.path.join("."))
-          .join(", ")}`);
-      } else {
-        console.error(
-          error instanceof Error ? error.message : "Unknown error occurred"
-        );
+        return {
+          success: false,
+          data: null,
+          message: `Invalid API response: ${error.issues
+            .map((e: z.ZodIssue) => e.path.join("."))
+            .join(", ")}`,
+        };
       }
-      return null;
+
+      return {
+        success: false,
+        data: null,
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      };
     }
   }
 }
 
 export const newsService = new NewsService();
-
-// Export the function for server-side usage
-export const getNewsById = newsService.getNewsById.bind(newsService);

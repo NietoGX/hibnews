@@ -9,19 +9,20 @@ interface GetNewsByIdResponse {
 
 export const getNewsById = async (id: string): Promise<GetNewsByIdResponse> => {
   try {
-    const news = await newsService.getNewsById(id);
+    const response = await newsService.getNewsById(id);
 
-    if (!news) {
+    if (!response.success) {
       return {
         success: false,
         data: null,
-        message: "News article not found",
+        message: response.message,
       };
     }
 
     return {
       success: true,
-      data: news,
+      data: response.data,
+      message: response.message,
     };
   } catch (error) {
     return {

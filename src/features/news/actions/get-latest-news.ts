@@ -9,10 +9,20 @@ interface GetLatestNewsResponse {
 
 export const getLatestNews = async (): Promise<GetLatestNewsResponse> => {
   try {
-    const news = (await newsService.getLatestNews()).data;
+    const response = await newsService.getLatestNews();
+
+    if (!response.success) {
+      return {
+        success: false,
+        data: [],
+        message: response.message,
+      };
+    }
+
     return {
       success: true,
-      data: news,
+      data: response.data,
+      message: response.message,
     };
   } catch (error) {
     return {
