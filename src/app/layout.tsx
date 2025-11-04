@@ -1,26 +1,27 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Navbar } from '@/components/ui/navbar'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ContentLayout } from "@/components/layouts/content-layout";
+import { Navbar } from "@/components/ui/navbar";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Hibnews',
-  description: 'News application',
-}
+  title: "Hibnews",
+  description: "News application",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <Navbar />
-        {children}
+        <ContentLayout>{children}</ContentLayout>
       </body>
     </html>
-  )
+  );
 }
