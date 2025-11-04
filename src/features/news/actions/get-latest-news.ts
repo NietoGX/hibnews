@@ -1,4 +1,4 @@
-import { newsService } from "../_services/news-service";
+import { newsService } from "../services/news-service";
 import { NewsArticle } from "../types";
 
 interface GetLatestNewsResponse {

@@ -1,7 +1,9 @@
 import { NewsArticle } from "../types";
 import Image from "next/image";
+import Link from "next/link";
 
 export const News = ({
+  id,
   title,
   content,
   author,
@@ -10,7 +12,8 @@ export const News = ({
   tags,
 }: NewsArticle) => {
   return (
-    <article className="bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow">
+    <Link href={`/news/${id}`}>
+      <article className="bg-white shadow-md rounded-lg p-6 mb-6 hover:shadow-lg transition-shadow cursor-pointer">
       <h2 className="text-2xl font-bold mb-4 text-gray-900">{title}</h2>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -45,5 +48,6 @@ export const News = ({
         </span>
       </div>
     </article>
+    </Link>
   );
 };

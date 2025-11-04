@@ -18,6 +18,11 @@ const newsResponseSchema = z.object({
   total: z.number(),
 });
 
+const singleNewsResponseSchema = z.object({
+  success: z.boolean(),
+  data: newsArticleSchema,
+});
+
 type ServiceResponse<T> = {
   success: boolean;
   data: T;
@@ -68,6 +73,37 @@ class NewsService {
       };
     }
   }
+
+  async getNewsById(id: string): Promise<NewsArticle | null> {
+    try {
+      const response = await api.get(`http://localhost:3000/api/news/${id}`);
+
+      if (!response) {
+        throw new Error("No response from server");
+      }
+
+      const validatedResponse = singleNewsResponseSchema.parse(response);
+
+      return {
+        ...validatedResponse.data,
+        publishedAt: new Date(validatedResponse.data.publishedAt),
+      };
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error(`Invalid API response: ${error.issues
+          .map((e: any) => e.path.join("."))
+          .join(", ")}`);
+      } else {
+        console.error(
+          error instanceof Error ? error.message : "Unknown error occurred"
+        );
+      }
+      return null;
+    }
+  }
 }
 
 export const newsService = new NewsService();
+
+// Export the function for server-side usage
+export const getNewsById = newsService.getNewsById.bind(newsService);
