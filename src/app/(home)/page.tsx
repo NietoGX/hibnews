@@ -1,5 +1,5 @@
-import { getLatestNews } from "@/features/news/_actions/get-latest-news";
-import { NewsList } from "@/features/news/_components/news-list";
+import { getLatestNews } from "@/features/news/actions/get-latest-news";
+import { News } from "@/features/news/components/news";
 
 export const revalidate = 60;
 
@@ -14,7 +14,20 @@ export default async function Home() {
           <p className="text-lg text-gray-600 mb-8">
             Your source for the latest news and updates.
           </p>
-          <NewsList news={news} />
+
+          {news.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No news articles available.</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                {news.map((article) => (
+                  <News key={article.id} {...article} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
