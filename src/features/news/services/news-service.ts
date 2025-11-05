@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { api } from "@/lib/http-client";
+import { getAllNews, findNewsById } from "@/lib/news-data";
 import { NewsArticle, Tag } from "../types";
 
 const newsArticleSchema = z.object({
@@ -34,13 +34,14 @@ type ValidatedNewsArticle = z.infer<typeof newsArticleSchema>;
 class NewsService {
   async getLatestNews(): Promise<ServiceResponse<NewsArticle[]>> {
     try {
-      const response = await api.get("http://localhost:3000/api/news/latest");
+      const newsData = getAllNews();
 
-      if (!response) {
-        throw new Error("No response from server");
-      }
-
-      const validatedResponse = newsResponseSchema.parse(response);
+      // Validate the data
+      const validatedResponse = newsResponseSchema.parse({
+        success: true,
+        data: newsData,
+        total: newsData.length,
+      });
 
       const processedNews = validatedResponse.data.map(
         (article: ValidatedNewsArticle) => ({
@@ -59,7 +60,7 @@ class NewsService {
         return {
           success: false,
           data: [],
-          message: `Invalid API response: ${error.issues
+          message: `Invalid data response: ${error.issues
             .map((e) => e.path.join("."))
             .join(", ")}`,
         };
@@ -76,13 +77,21 @@ class NewsService {
 
   async getNewsById(id: string): Promise<ServiceResponse<NewsArticle | null>> {
     try {
-      const response = await api.get(`http://localhost:3000/api/news/${id}`);
+      const newsArticle = findNewsById(id);
 
-      if (!response) {
-        throw new Error("No response from server");
+      if (!newsArticle) {
+        return {
+          success: false,
+          data: null,
+          message: `News article ${id} not found`,
+        };
       }
 
-      const validatedResponse = singleNewsResponseSchema.parse(response);
+      // Validate the data
+      const validatedResponse = singleNewsResponseSchema.parse({
+        success: true,
+        data: newsArticle,
+      });
 
       const processedNews = {
         ...validatedResponse.data,
@@ -99,7 +108,7 @@ class NewsService {
         return {
           success: false,
           data: null,
-          message: `Invalid API response: ${error.issues
+          message: `Invalid data response: ${error.issues
             .map((e) => e.path.join("."))
             .join(", ")}`,
         };
