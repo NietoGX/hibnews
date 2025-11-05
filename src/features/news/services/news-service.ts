@@ -34,9 +34,7 @@ type ValidatedNewsArticle = z.infer<typeof newsArticleSchema>;
 class NewsService {
   async getLatestNews(): Promise<ServiceResponse<NewsArticle[]>> {
     try {
-      const response = await api.get("http://localhost:3000/api/news/latest", {
-        next: { revalidate: 300 }
-      });
+      const response = await api.get("http://localhost:3000/api/news/latest");
 
       if (!response) {
         throw new Error("No response from server");
@@ -78,9 +76,7 @@ class NewsService {
 
   async getNewsById(id: string): Promise<ServiceResponse<NewsArticle | null>> {
     try {
-      const response = await api.get(`http://localhost:3000/api/news/${id}`, {
-        next: { revalidate: 300 }
-      });
+      const response = await api.get(`http://localhost:3000/api/news/${id}`);
 
       if (!response) {
         throw new Error("No response from server");
