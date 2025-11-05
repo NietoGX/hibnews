@@ -10,6 +10,8 @@ interface NewsPageProps {
     id: string;
   }>;
 }
+export const dynamic = "force-static";
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const ids = await getAllNewsIds();

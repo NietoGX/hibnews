@@ -32,9 +32,13 @@ type ServiceResponse<T> = {
 type ValidatedNewsArticle = z.infer<typeof newsArticleSchema>;
 
 class NewsService {
-  async getLatestNews(): Promise<ServiceResponse<NewsArticle[]>> {
+  async getLatestNews(tag?: Tag): Promise<ServiceResponse<NewsArticle[]>> {
     try {
-      const newsData = getAllNews();
+      let newsData = getAllNews();
+
+      if (tag) {
+        newsData = newsData.filter((article) => article.tags.includes(tag));
+      }
 
       // Validate the data
       const validatedResponse = newsResponseSchema.parse({
@@ -53,7 +57,9 @@ class NewsService {
       return {
         success: true,
         data: processedNews,
-        message: "Latest news fetched successfully",
+        message: tag
+          ? `News filtered by ${tag} fetched successfully`
+          : "Latest news fetched successfully",
       };
     } catch (error) {
       if (error instanceof z.ZodError) {
