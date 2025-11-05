@@ -1,5 +1,5 @@
 import { newsService } from "../services/news-service";
-import { NewsArticle } from "../types";
+import { NewsArticle, Tag } from "../types";
 
 interface GetLatestNewsResponse {
   success: boolean;
@@ -7,9 +7,9 @@ interface GetLatestNewsResponse {
   message?: string;
 }
 
-export const getLatestNews = async (): Promise<GetLatestNewsResponse> => {
+export const getLatestNews = async (tag?: Tag): Promise<GetLatestNewsResponse> => {
   try {
-    const response = await newsService.getLatestNews();
+    const response = await newsService.getLatestNews(tag);
 
     if (!response.success) {
       return {
