@@ -43,7 +43,7 @@ export default async function NewsPage({ params }: NewsPageProps) {
             </Link>
 
             <header className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
                 {news.title}
               </h1>
 
