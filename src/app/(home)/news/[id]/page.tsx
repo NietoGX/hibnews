@@ -11,8 +11,6 @@ interface NewsPageProps {
   }>;
 }
 
-export const revalidate = 300; // Regenerate every 5 minutes
-
 export async function generateStaticParams() {
   const ids = await getAllNewsIds();
 
