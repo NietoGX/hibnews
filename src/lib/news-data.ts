@@ -37,12 +37,12 @@ export const newsDatabase: NewsArticle[] = [
     id: "4",
     title: "Blockbuster Movie Shatters Box Office Records",
     content:
-      'The highly anticipated sci-fi epic "Cosmic Odyssey" has broken opening weekend records, earning $500 million globally. The film, starring Emma Thompson and Chris Johnson, has received critical acclaim for its stunning visual effects and compelling storyline. The movie has captivated audiences worldwide with its ambitious storytelling and groundbreaking visual effects that push the boundaries of what\'s possible in cinema. Critics are praising it as a masterpiece that combines spectacular action with deep emotional resonance. The film\'s success marks a significant moment for the entertainment industry, demonstrating that audiences are hungry for ambitious, thought-provoking science fiction. Industry analysts predict it could become one of the highest-grossing films of all time.',
+      "The highly anticipated sci-fi epic \"Cosmic Odyssey\" has broken opening weekend records, earning $500 million globally. The film, starring Emma Thompson and Chris Johnson, has received critical acclaim for its stunning visual effects and compelling storyline. The movie has captivated audiences worldwide with its ambitious storytelling and groundbreaking visual effects that push the boundaries of what's possible in cinema. Critics are praising it as a masterpiece that combines spectacular action with deep emotional resonance. The film's success marks a significant moment for the entertainment industry, demonstrating that audiences are hungry for ambitious, thought-provoking science fiction. Industry analysts predict it could become one of the highest-grossing films of all time.",
     author: "Jessica Martinez",
     publishedAt: new Date("2024-01-12T18:45:00Z"),
     tags: [Tag.ENTERTAINMENT],
     imageUrl:
-      "https://images.unsplash.com/photo-1489599457952-9b1d8b5b4c1f?w=800",
+      "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800",
   },
   {
     id: "5",
@@ -114,7 +114,7 @@ export const newsDatabase: NewsArticle[] = [
 
 // Helper functions
 export const findNewsById = (id: string): NewsArticle | undefined => {
-  return newsDatabase.find(article => article.id === id);
+  return newsDatabase.find((article) => article.id === id);
 };
 
 export const getAllNews = (): NewsArticle[] => {
