@@ -1,6 +1,10 @@
+"use client";
+
+import { useNearScreen } from "@/shared/hooks/useNearScreen";
 import { NewsArticle } from "../types";
 import Image from "next/image";
 import Link from "next/link";
+import { ImagePreloader } from "@/shared/components/ImagePreloader";
 
 interface NewsProps extends Omit<NewsArticle, "content"> {
   featured?: boolean;
@@ -15,8 +19,14 @@ export const News = ({
   tags,
   featured = false,
 }: NewsProps) => {
+  const { isNear, fromRef } = useNearScreen({
+    distance: featured ? "0px" : "200px",
+    once: true,
+  });
+
   return (
     <article
+      ref={fromRef}
       className={`
         bg-white shadow-md rounded-lg cursor-pointer
         transform transition-all duration-300 ease-out
@@ -78,6 +88,16 @@ export const News = ({
           </span>
         </div>
       </Link>
+
+      {isNear && imageUrl && (
+        <ImagePreloader
+          src={imageUrl}
+          width={featured ? 1200 : 600}
+          height={featured ? 600 : 400}
+          quality={75}
+          alt={`Preload: ${title}`}
+        />
+      )}
     </article>
   );
 };
