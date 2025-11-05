@@ -34,7 +34,7 @@ async function fetchApi<T>(
     headers = {},
     body,
     params,
-    cache = "no-store",
+    cache,
     next,
   } = options;
 
@@ -50,7 +50,7 @@ async function fetchApi<T>(
       },
       body: body ? JSON.stringify(body) : undefined,
       credentials: "include",
-      cache,
+      cache: next ? undefined : (cache ?? "no-store"),
       next,
     });
 

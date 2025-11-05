@@ -34,7 +34,9 @@ type ValidatedNewsArticle = z.infer<typeof newsArticleSchema>;
 class NewsService {
   async getLatestNews(): Promise<ServiceResponse<NewsArticle[]>> {
     try {
-      const response = await api.get("http://localhost:3000/api/news/latest");
+      const response = await api.get("http://localhost:3000/api/news/latest", {
+        next: { revalidate: 300 }
+      });
 
       if (!response) {
         throw new Error("No response from server");
@@ -60,7 +62,7 @@ class NewsService {
           success: false,
           data: [],
           message: `Invalid API response: ${error.issues
-            .map((e: z.ZodIssue) => e.path.join("."))
+            .map((e) => e.path.join("."))
             .join(", ")}`,
         };
       }
@@ -76,7 +78,9 @@ class NewsService {
 
   async getNewsById(id: string): Promise<ServiceResponse<NewsArticle | null>> {
     try {
-      const response = await api.get(`http://localhost:3000/api/news/${id}`);
+      const response = await api.get(`http://localhost:3000/api/news/${id}`, {
+        next: { revalidate: 300 }
+      });
 
       if (!response) {
         throw new Error("No response from server");
@@ -100,7 +104,7 @@ class NewsService {
           success: false,
           data: null,
           message: `Invalid API response: ${error.issues
-            .map((e: z.ZodIssue) => e.path.join("."))
+            .map((e) => e.path.join("."))
             .join(", ")}`,
         };
       }
